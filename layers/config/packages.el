@@ -9,6 +9,7 @@
         ispell
         projectile
         yasnippet
+        cdlatex
 
         ;; Elsehwere-owned packages
         (avy-config      :location local)
@@ -17,7 +18,7 @@
         (gnus-config     :location local)
         (ivy-config      :location local)
         (org-config      :location local)
-        (treemacs-config :location local)
+        ;; (treemacs-config :location local)
         ))
 
 ;;; Minor Config
@@ -62,6 +63,22 @@
 (defun config/init-treemacs-config ()
   (use-package treemacs-config
     :after macros))
+
+;;; cdlatex
+
+(defun config/init-cdlatex ()
+  (use-package cdlatex
+    :after org
+    :init
+    (progn
+      (load "~/programming/emacs-lisp/texmathp.el")
+      (load "~/programming/emacs-lisp/org-cdlatex-try-tab/org-cdlatex-try-tab.el")
+      ;; the command =C- SHIFT TAB= for trigger cdtalx abbrev expansion in org-mode
+      ;; This is my private setup.
+
+      ;; enable CDLaTex minor-mode for entering math (equations, or symbols)
+      (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+      )))
 
 ;;; Outshine
 

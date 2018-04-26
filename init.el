@@ -9,8 +9,10 @@
 ;; All configuration is housed in personal layers - see README.
 ;; `init.el' configures spacemacs, defining required `dotspacemacs/...' functions.
 
-(defvar ERIC-ONLY? t
+(defvar ERIC-ONLY? nil
   "If cloning, set to nil, enable non-layer personal configuration.")
+
+(setq user-full-name "Yu (Aaron) Shen")
 
 (defvar linux? (eq system-type 'gnu/linux)
   "Are we on a gnu/linux machine?")
@@ -97,6 +99,7 @@
     rust
 
     csv
+    sql
     html
     markdown
     yaml
@@ -119,11 +122,11 @@
 ;;;; Extra
 
 (defvar dotspacemacs/layers/extra
-  '(gnus
+  '(;; gnus
     graphviz
     pdf-tools
     ranger
-    treemacs
+    ;; treemacs ; seems not working with the develop branch, and of no use to me
 
     (ibuffer :variables
              ibuffer-group-buffers-by 'projects)
@@ -166,6 +169,9 @@
      solarized-theme
      nord-theme
      faceup
+     org-noter                         ; note taking like interleave
+     pandoc-mode
+     ox-reveal
      )
 
    dotspacemacs-excluded-packages

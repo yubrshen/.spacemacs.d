@@ -97,7 +97,7 @@
     emacs-lisp
     javascript
     rust
-
+    elm
     csv
     sql
     html

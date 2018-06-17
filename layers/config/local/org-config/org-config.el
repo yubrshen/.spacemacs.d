@@ -125,11 +125,20 @@
 ;;                                  ("linenos" "")))
 ;; having trouble with minted packages
 
+;; Use xelatex instead of pdflatex to support Chinese text
+;; (setq
+;;  org-latex-pdf-process
+;;  '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+;;    "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+;;    "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 (setq
- org-latex-pdf-process
- '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-   "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-   "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+  org-latex-to-pdf-process
+  '("xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+     "xelatex -shell-escape  -interaction nonstopmode -output-directory %o %f"
+     "xelatex -shell-escape  -interaction nonstopmode -output-directory %o %f"))
+;; To export Chinese text, the org file must have the following options set:
+;; #+LATEX_HEADER: usepackage{xltxtra}
+;; #+LATEX_HEADER: setmainfont{WenQuanYi Micro Hei}
 
 ;;; Babel
 

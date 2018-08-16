@@ -125,20 +125,98 @@
 ;;                                  ("linenos" "")))
 ;; having trouble with minted packages
 
-;; Use xelatex instead of pdflatex to support Chinese text
+;; Use xelatex instead of pdflatex to support Chinese text in unicode
 ;; (setq
 ;;  org-latex-pdf-process
 ;;  '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
 ;;    "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
 ;;    "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
-(setq
-  org-latex-to-pdf-process
-  '("xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-     "xelatex -shell-escape  -interaction nonstopmode -output-directory %o %f"
-     "xelatex -shell-escape  -interaction nonstopmode -output-directory %o %f"))
+
+;; The following is based on
+;; based on https://orgmode.org/worg/org-faq.html#using-xelatex-for-pdf-export
+(require 'ox-latex)
+(setq org-latex-listings t)
+
+;; Originally taken from Bruno Tavernier: http://thread.gmane.org/gmane.emacs.orgmode/31150/focus=31432
+;; but adapted to use latexmk 4.20 or higher.
+;; combinde with the suggestion by
+;; https://stackoverflow.com/questions/47623041/getting-emacs-spacemacs-to-accept-function-that-changes-latex-compiler-based-u
+;; fixing the the content of texcmd for xelatex
+
+;; Specify default packages to be included in every tex file, whether pdflatex or xelatex
+(setq org-latex-packages-alist
+  '(("" "graphicx" t)
+     ("" "longtable" nil)
+     ("" "float" nil)))
+
+(defun my-auto-tex-cmd (file)
+  "When exporting from .org with latex, automatically run latex,
+     pdflatex, or xelatex as appropriate, using latexmk."
+  (let ((texcmd))
+    (if (string-match "LATEX_CMD: xelatex" (buffer-string))
+      (progn                            ; else
+        ;; xelatex -> .pdf
+        (setq texcmd "latexmk -pdflatex=xelatex -8bit -pdf %f") ; removing -quiet
+        ;; Packages to include when xelatex is used
+        (setq org-latex-default-packages-alist
+          (append org-latex-default-packages-alist
+            '(("" "fontspec" t)
+               ("" "xunicode" t)
+               ("" "url" t)
+               ("" "rotating" t)
+               ("american" "babel" t)
+               ("babel" "csquotes" t)
+               ("" "soul" t)
+               ("xetex" "hyperref" nil)
+               )))
+        (setq org-latex-classes
+          (append org-latex-classes
+            (cons '("article"
+                     "\\documentclass[11pt,article,oneside]{memoir}"
+                     ("\\section{%s}" . "\\section*{%s}")
+                     ("\\subsection{%s}" . "\\subsection*{%s}")
+                     ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                     ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                     ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+              org-latex-classes)))
+        )
+      (progn                            ; else
+        ;; pdflatex -> .pdf
+        (setq texcmd "latexmk -pdf -quiet %f")
+        ;; default packages for ordinary latex or pdflatex export
+        (setq org-latex-default-packages-alist
+          (append org-latex-default-packages-alist
+            '(("AUTO" "inputenc" t)
+               ("T1"   "fontenc"   t)
+               (""     "fixltx2e"  nil)
+               ("normalem" "ulem" t)
+               (""     "wrapfig"   nil)
+               (""     "soul"      t)
+               (""     "textcomp"  t)
+               (""     "marvosym"  t)
+               (""     "wasysym"   t)
+               (""     "latexsym"  t)
+               (""     "amssymb"   t)
+               (""     "hyperref"  nil))))))
+    ;; LaTeX compilation command
+    (setq org-latex-pdf-process (list texcmd))))
+;; (add-hook 'org-export-latex-after-initial-vars-hook 'my-auto-tex-cmd)
+(add-hook 'org-export-before-parsing-hook 'my-auto-tex-cmd) ; must add hoot to org-export-before-parsing-hook
+
+;; The following solution also work after fixing the variable org-latex-pdf-process
+;; remove -to- in it.
+;; But it's less generic.
+;; (setq
+;;   org-latex-pdf-process
+;;   '("xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+;;      "xelatex -shell-escape  -interaction nonstopmode -output-directory %o %f"
+;;      "xelatex -shell-escape  -interaction nonstopmode -output-directory %o %f"))
 ;; To export Chinese text, the org file must have the following options set:
-;; #+LATEX_HEADER: usepackage{xltxtra}
-;; #+LATEX_HEADER: setmainfont{WenQuanYi Micro Hei}
+;; #+LATEX_HEADER: \usepackage{xltxtra}
+;; #+LATEX_HEADER: \setmainfont{WenQuanYi Micro Hei}
+
+;; There are a lot more configuration to learn from
+;; https://github.com/kaushalmodi/.emacs.d/blob/42831e8997f7a3c90bf4bd37ae9f03c48277781d/setup-files/setup-org.el#L413-L584
 
 ;;; Babel
 

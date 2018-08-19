@@ -35,17 +35,13 @@
              '(;; Functional
                :lambda
                "fn"
-               :def "defn" :composition "comp"
+               :def "defn"
 
                ;; Types
                :null "None"
-               :true "True" :false "False"
 
                ;; Flow
-               :not "not"
-               :in "in" :not-in "not-in"
-               :and "and" :or "or"
-               :some "some"
+               :not "not" :in "in" :not-in "not-in"
 
                ;; Other
                :tuple "#t"  ; Tag macro for tuple casting
@@ -60,7 +56,6 @@
 
                ;; Types
                :null "None"
-               :true "True" :false "False"
                :int "int" :float "float"
                :str "str" :bool "bool"
 
@@ -166,7 +161,11 @@
           ;; 𝕊    ⨂      ∅      ⟻    ⟼     ⊙      𝕋       𝔽
           #x1d54a #x2a02 #x2205 #x27fb #x27fc #x2299 #x1d54b #x1d53d
           ;; 𝔹    𝔇       𝔗
-          #x1d539 #x1d507 #x1d517))))))
+          #x1d539 #x1d507 #x1d517)
+
+         ("Cantarell"
+          ;; ƒ
+          #x192))))))
 
 ;;;; Pretty-magit
 
@@ -247,27 +246,19 @@
     :config
     (progn
       (defconst all-the-icons-icon-hy
-        '("\\.hy$"
-          all-the-icons-fileicon "lisp" :face all-the-icons-orange))
+        '("\\.hy$" all-the-icons-fileicon "lisp" :face all-the-icons-orange))
       (defconst all-the-icons-mode-icon-hy
-        '(hy-mode
-          all-the-icons-fileicon "lisp" :face all-the-icons-orange))
+        '(hy-mode all-the-icons-fileicon "lisp" :face all-the-icons-orange))
 
       (defconst all-the-icons-icon-graphviz
-        '("\\.dot$"
-          all-the-icons-fileicon "graphviz" :face all-the-icons-pink))
+        '("\\.dot$" all-the-icons-fileicon "graphviz" :face all-the-icons-pink))
       (defconst all-the-icons-mode-icon-graphviz
-        '(graphviz-dot-mode
-          all-the-icons-fileicon "graphviz" :face all-the-icons-pink))
+        '(graphviz-dot-mode all-the-icons-fileicon "graphviz" :face all-the-icons-pink))
 
-      (add-to-list 'all-the-icons-icon-alist
-                   all-the-icons-icon-hy)
-      (add-to-list 'all-the-icons-icon-alist
-                   all-the-icons-icon-graphviz)
-      (add-to-list 'all-the-icons-mode-icon-alist
-                   all-the-icons-mode-icon-hy)
-      (add-to-list 'all-the-icons-mode-icon-alist
-                   all-the-icons-mode-icon-graphviz))))
+      (add-to-list 'all-the-icons-icon-alist all-the-icons-icon-hy)
+      (add-to-list 'all-the-icons-icon-alist all-the-icons-icon-graphviz)
+      (add-to-list 'all-the-icons-mode-icon-alist all-the-icons-mode-icon-hy)
+      (add-to-list 'all-the-icons-mode-icon-alist all-the-icons-mode-icon-graphviz))))
 
 ;;;; All-the-icons-ivy
 
@@ -313,20 +304,11 @@
 (defun display/post-init-spaceline-all-the-icons ()
   (spaceline-all-the-icons-theme)
 
-  (setq spaceline-highlight-face-func
-        'spaceline-highlight-face-default)
-
-  (setq spaceline-all-the-icons-icon-set-modified
-        'chain)
-
-  (setq spaceline-all-the-icons-icon-set-window-numbering
-        'square)
-
-  (setq spaceline-all-the-icons-separator-type
-        'none)
-
-  (setq spaceline-all-the-icons-primary-separator
-        "")
+  (setq spaceline-highlight-face-func 'spaceline-highlight-face-default)
+  (setq spaceline-all-the-icons-icon-set-modified 'chain)
+  (setq spaceline-all-the-icons-icon-set-window-numbering 'square)
+  (setq spaceline-all-the-icons-separator-type 'none)
+  (setq spaceline-all-the-icons-primary-separator "")
 
   ;; Buffer Segments
   (spaceline-toggle-all-the-icons-buffer-size-off)

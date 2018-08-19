@@ -17,9 +17,7 @@
         (evil-config     :location local)
         (gnus-config     :location local)
         (ivy-config      :location local)
-        (org-config      :location local)
-        ;; (treemacs-config :location local)
-        ))
+        (org-config      :location local)))
 
 ;;; Minor Config
 
@@ -59,10 +57,6 @@
 (defun config/init-org-config ()
   (use-package org-config
     :after org macros))
-
-(defun config/init-treemacs-config ()
-  (use-package treemacs-config
-    :after macros))
 
 ;;; cdlatex
 

@@ -3,19 +3,15 @@
 (require 'org-bullets)
 (require 'ox-bibtex)
 (require 'ox-extra)
-;(require 'ox-reveal)
+(require 'ox-latex)
+(require 'bibtex)
 (load "~/programming/write-slides-with-emacs-org-reveal/org-reveal/ox-reveal.el")
 
 (provide 'org-config)
 
 ;;; Bindings and Hooks
 
-(add-hook 'org-mode-hook (lambda () (auto-fill-mode 1)))
-(add-hook 'org-mode-hook 'flyspell-mode)
-(add-hook 'org-mode-hook 'org-toggle-blocks)
-
 (spacemacs/set-leader-keys "aof" 'org-open-at-point-global)
-
 (define-key org-mode-map (kbd "C-c t") 'org-toggle-blocks)
 
 (evil-define-key '(normal visual motion) org-mode-map
@@ -25,9 +21,11 @@
   "gl" 'outline-next-visible-heading
   "gu" 'outline-previous-visible-heading)
 
-;; Quick refile of project tasks
-(setq org-refile-targets '((nil :regexp . "Week of")))
+(add-hook 'org-mode-hook (lambda () (auto-fill-mode 1)))
+(add-hook 'org-mode-hook 'flyspell-mode)
+(add-hook 'org-mode-hook 'org-toggle-blocks)
 
+(setq org-refile-targets '((nil :regexp . "Week of")))
 (spacemacs/set-leader-keys-for-major-mode 'org-mode "r" 'org-refile)
 
 ;;; Theming
@@ -221,7 +219,8 @@
 ;;; Babel
 
 (org-babel-do-load-languages
- 'org-babel-load-languages '((python .  t)
+ 'org-babel-load-languages '((latex .   t)
+                             (python .  t)
                              (haskell . t)
                              (clojure . t)
                              (dot .     t)

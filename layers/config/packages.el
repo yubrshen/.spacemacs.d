@@ -15,7 +15,7 @@
         (avy-config      :location local)
         (eshell-config   :location local)
         (evil-config     :location local)
-        (gnus-config     :location local)
+        ;; (gnus-config     :location local), no needed 10/20/2018
         (ivy-config      :location local)
         (org-config      :location local)))
 

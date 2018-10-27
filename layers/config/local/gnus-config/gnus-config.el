@@ -3,7 +3,7 @@
 (provide 'gnus-config)
 
 
-(setq user-mail-address yubrshen@gmail.com)
+(setq user-mail-address "yubrshen@gmail.com")
 (setq  user-full-name "Yu (Aaron) Shen")
 
 (setq message-send-mail-function 'smtpmail-send-it)

@@ -4,6 +4,6 @@
    macros
 
    ;; Core Config layers
-   gnus
+   ;; gnus ; not really needed 10/20/2018
    org
    ))

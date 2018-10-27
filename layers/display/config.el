@@ -1,189 +1,155 @@
-;; Display mofidications for `solarized-light' and `zenburn' applied here
+;;; -*- lexical-binding: t -*-
 
-;;; Solarized-light
-;;;; Outlines
+;; Display mofidications for `solarized-light' and `zenburn' applied here.
 
-(setq display/solarized-light-theming/org
-      `((outline-1 :height 1.25
-                   :foreground "#C3A29E"
-                   :weight ,(if linux? 'normal 'ultra-bold)
-                   :italic nil
-                   :underline t)
+;; Try out changes with `spacemacs/update-theme' to see theme updates
+;; or alternatively run `spacemacs/cycle-spacemacs-theme' with 'SPC T n'.
 
-        (outline-2 :height 1.15
-                   :foreground "#8D6B94"
-                   :weight ,(if linux? 'normal 'ultra-bold)
-                   :italic nil
-                   :underline t)
+;; Theming updates are structured and modularized where possible.
 
-        (outline-3 :height 1.15
-                   :foreground "#8C5F66"
-                   :weight ,(if linux? 'normal 'ultra-bold)
-                   :italic nil
-                   :underline t)
+;; Changes of note:
+;; 1. All outline/org-level heading styling
+;; 2. Comments/strings are italicized
+;; 3. Transparent active and monochrome inactive modelines
+;; 4. Various small gradient changes to core font-lock-faces
 
-        (org-level-1 :height 1.25
-                     :inherit nil
-                     :foreground "#C3A29E"
-                     :weight ,(if linux? 'normal 'ultra-bold)
-                     :italic nil
-                     :underline t)
+;;; Configuration
+;;;; Core
 
-        (org-level-2 :height 1.15
-                     :inherit nil
-                     :foreground "#8D6B94"
-                     :weight ,(if linux? 'normal 'ultra-bold)
-                     :italic nil
-                     :underline t)
+(setq solarized-use-variable-pitch nil)
+(setq face-remapping-alist '(;; Headers - outlines match org
+                             (outline-1 org-level-1)
+                             (outline-2 org-level-2)
+                             (outline-3 org-level-3)
 
-        (org-level-3 :height 1.15
-                     :inherit nil
-                     :foreground "#8C5F66"
-                     :weight ,(if linux? 'normal 'ultra-bold)
-                     :italic nil)
+                             ;; Modeline - invis. active, monochrome inactive
+                             (powerline-active1        mode-line)
+                             (powerline-active2        mode-line)
+                             (spaceline-highlight-face mode-line)
+                             (powerline-inactive1      mode-line-inactive)
+                             (powerline-inactive2      mode-line-inactive)))
 
-        (org-block-begin-line :height 1.05 :foreground "#576e75"
-                              :box t :weight bold)
-        (org-block-end-line :height 1.05 :foreground "#576e75"
-                            :box t :weight bold)))
+;;;; Styling
+;;;;; Headers
 
-;;;; Mode-line
+(setq display/headers/common '(:underline t :inherit nil))
+(setq display/headers/zenburn
+      `((org-level-1
+         ,@display/headers/common
+         :height 1.35
+         :foreground "#DFAF8F")
+        (org-level-2
+         ,@display/headers/common
+         :height 1.25
+         :foreground "#BFEBBF")
+        (org-level-3
+         ,@display/headers/common
+         :height 1.15
+         :foreground "#7CB8BB")))
+(setq display/headers/solarized-light
+      `((org-level-1
+         ,@display/headers/common
+         :height 1.35
+         :foreground "#a71d31")
+        (org-level-2
+         ,@display/headers/common
+         :height 1.25
+         :foreground "#8D6B94")
+        (org-level-3
+         ,@display/headers/common
+         :height 1.15)))
 
-(setq display/solarized-light-theming/mode-line
-      `(;; active modeline has no colors
-        (mode-line :inherit mode-line :background "#eee8d5"
-                   :box nil :underline nil :overline "#eee8d5")
-        (mode-line-inactive :inherit mode-line :background "#eee8d5"
-                            :box nil :underline nil :overline nil)
-        (spaceline-highlight-face :inherit mode-line :background "#eee8d5")
-        (powerline-active1 :inherit mode-line :background "#eee8d5")
-        (powerline-active2 :inherit mode-line :background "#eee8d5")
+;;;;; Org-blocks
 
-        ;; Inactive modeline has tint
-        (powerline-inactive2 :inherit powerline-inactive1 :background "#eee8d5")))
+(setq display/org-blocks/common '(:italic nil :underline nil :box t))
+(setq display/org-blocks
+      `((org-block-begin-line
+         ,@display/org-blocks/common)
+        (org-block-end-line
+         ,@display/org-blocks/common)))
 
-;;;; Grouped
+;;;;; Company
 
-(setq display/solarized-light-theming
-      `(solarized-light
-        ,@display/solarized-light-theming/org
-        ,@display/solarized-light-theming/mode-line
-
-        (company-tooltip-common
-         :inherit company-tooltip :weight bold :underline nil)
+(setq display/company/common '(:weight bold :underline nil))
+(setq display/company
+      `((company-tooltip-common
+         ,@display/company/common
+         :inherit company-tooltip)
         (company-tooltip-common-selection
-         :inherit company-tooltip-selection :weight bold :underline nil)
+         ,@display/company/common
+         :inherit company-tooltip-selection)))
 
-        (font-lock-comment-face :foreground "#586e75" :italic t :weight normal)
-        (avy-background-face :foreground "#586e75" :italic nil)
-        (font-lock-doc-face :foreground "#2aa198" :italic t :weight normal)
+;;;;; Mode-line
 
-        ;; Makes matching parens obvious
-        (sp-show-pair-match-face :inherit sp-show-pair-match-face
-                                 :background "#586e75")))
+(setq display/mode-line/common '(:box nil :underline nil))
+(setq display/mode-line
+      `((mode-line
+         ,@display/mode-line/common
+         :background nil)
+        (mode-line-inactive
+         ,@display/mode-line/common)))
 
-;;; Zenburn
-;;;; Outlines
+;;;;; Font-locks
 
-(setq display/zenburn/outlines
-      `((outline-1 :height 1.35
-                   :foreground "#DFAF8F"
-                   :weight ,(if linux? 'normal 'ultra-bold)
-                   :italic nil
-                   :underline t)
+(setq display/font-locks
+      `((font-lock-comment-face
+         :italic t
+         :weight normal)
+        (font-lock-doc-face
+         :italic t
+         :weight normal)))
 
-        (outline-2 :height 1.25
-                   :foreground "#BFEBBF"
-                   :weight ,(if linux? 'normal 'ultra-bold)
-                   :italic nil
-                   :underline t
-                   :inherit nil)
+;;; Theming
+;;;; Common
 
-        (outline-3 :height 1.15
-                   :foreground "#7CB8BB"
-                   :weight ,(if linux? 'normal 'ultra-bold)
-                   :italic nil
-                   :underline t
-                   :inherit nil)
+(setq display/common-theming
+      `(,@display/company
+        ,@display/mode-line
+        ,@display/org-blocks
 
-        (org-level-1 :height 1.35
-                     :inherit nil
-                     :foreground "#DFAF8F"
-                     :weight ,(if linux? 'normal 'ultra-bold)
-                     :italic nil
-                     :underline t
-                     :inherit nil)
-
-        (org-level-2 :height 1.25
-                     :inherit nil
-                     :foreground "#BFEBBF"
-                     :weight ,(if linux? 'normal 'ultra-bold)
-                     :italic nil
-                     :underline t
-                     :inherit nil)
-
-        (org-level-3 :height 1.15
-                     :inherit nil
-                     :foreground "#7CB8BB"
-                     :weight ,(if linux? 'normal 'ultra-bold)
-                     :italic nil
-                     :inherit nil)
-
-        (org-block-begin-line :height 1.05 :foreground "#576e75"
-                              :box t :weight bold)
-        (org-block-end-line :height 1.05 :foreground "#576e75"
-                            :box t :weight bold)
-
-        ;; zenburn specific changes
-        (oi-face-1 :inherit outline-1)
-        (oi-face-2 :inherit outline-2 :underline nil)
-        (oi-face-3 :inherit outline-3 :underline nil)))
-
-;;;; Mode-line
-
-
-(setq display/zenburn/mode-line
-      `(;; active modeline has no colors
-        (mode-line :inherit mode-line :background "#3F3F3F"
-                   :box nil :underline nil :overline nil)
-        (mode-line-inactive :inherit mode-line :background "#3F3F3F"
-                            :box nil :underline nil :overline nil)
-        (spaceline-highlight-face :inherit mode-line :background "#3F3F3F")
-        (powerline-active1 :inherit mode-line :background "#3F3F3F")
-        (powerline-active2 :inherit mode-line :background "#3F3F3F")
-        (powerline-inactive2 :inherit powerline-inactive1 :background nil)))
-
-;;;; Font-Lock faces
-
-(setq display/zenburn/font-lock-faces
-      `((font-lock-type-face :foreground "LightCoral")
-        (font-lock-function-name-face :foreground "CadetBlue2")
-
-        (font-lock-comment-delimiter-face :foreground "gray35")
-        (font-lock-comment-face :italic t :weight normal :foreground "gray50")
-        (font-lock-doc-face :italic t :weight normal :foreground "gray65")))
-
-;;;; Grouped
-
-(setq display/zenburn
-      `(zenburn
-        ,@display/zenburn/outlines
-        ,@display/zenburn/mode-line
-        ,@display/zenburn/font-lock-faces
-
-        (company-tooltip-common
-         :inherit company-tooltip :weight bold :underline nil)
-        (company-tooltip-common-selection
-         :inherit company-tooltip-selection :weight bold :underline nil)
-
-        (avy-background-face :foreground "#586e75" :italic nil)
-
-        ;; Makes matching parens obvious
-        (sp-show-pair-match-face :underline t)
-
+        (avy-background-face :italic nil)
         (fringe :background nil)))
 
-;;; Set Theme Changes
+;;;; Themes
 
-(setq theming-modifications (list display/zenburn
-                                  display/solarized-light-theming))
+(setq display/solarized-light-theming
+      `(;; Overwrites
+        (mode-line-inactive :background "#eee8d5"
+                            ,@(alist-get 'mode-line-inactive
+                                         display/mode-line))
+
+        (font-lock-comment-face :foreground "#586e75"
+                                ,@(alist-get 'font-lock-comment-face
+                                             display/font-locks))
+        (font-lock-doc-face :foreground "#2aa198"
+                            ,@(alist-get 'font-lock-doc-face
+                                         display/font-locks))
+
+        ;; Extra
+        (sp-show-pair-match-face :background  "CadetBlue3")))
+
+(setq display/zenburn-theming
+      `(;; Overwrites
+        (font-lock-comment-face :foreground "gray50"
+                                ,@(alist-get 'font-lock-comment-face
+                                             display/font-locks))
+        (font-lock-doc-face :foreground "gray65"
+                            ,@(alist-get 'font-lock-doc-face
+                                         display/font-locks))
+
+        ;; Extra
+        (font-lock-comment-delimiter-face :foreground "gray35")
+        (font-lock-function-name-face     :foreground "CadetBlue2")
+        (font-lock-type-face              :foreground "LightCoral")))
+
+;;;; Set Modifications
+
+;; This variable is the only `theming' layer requirement to enable our theming
+
+(setq theming-modifications
+      `((zenburn         ,@display/common-theming
+                         ,@display/headers/zenburn
+                         ,@display/zenburn-theming)
+        (solarized-light ,@display/common-theming
+                         ,@display/headers/solarized-light
+                         ,@display/solarized-light-theming)))

@@ -2,9 +2,12 @@
 
 (provide 'gnus-config)
 
+;;; Configuration
 
 (setq user-mail-address yubrshen@gmail.com)
-(setq  user-full-name "Yu (Aaron) Shen")
+(setq user-full-name "Yu (Aaron) Shen")
+
+(setq mm-inline-large-images 'resize)
 
 (setq message-send-mail-function 'smtpmail-send-it)
 (setq message-directory "~/gmail")

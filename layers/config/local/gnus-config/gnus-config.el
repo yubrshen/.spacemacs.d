@@ -4,7 +4,7 @@
 
 ;;; Configuration
 
-(setq user-mail-address yubrshen@gmail.com)
+(setq user-mail-address "yubrshen@gmail.com")
 (setq user-full-name "Yu (Aaron) Shen")
 
 (setq mm-inline-large-images 'resize)

@@ -124,42 +124,44 @@ All `dotspacemacs-' variables with values set different than their defaults.
 They are all defined in `~/.emacs.d/core/core-dotspacemacs.el'.
 Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
   (setq-default
-   ;; Display
-   dotspacemacs-default-font `(,dotspacemacs/font
-                               :size ,(cond (mac? 18) (desktop? 20) (t 34))
-                               :powerline-scale 1.5)
-   dotspacemacs-themes       '(solarized-light
-                               zenburn)
+    ;; Display
+    dotspacemacs-default-font `(,dotspacemacs/font
+                                 :size ,(cond (mac? 18) (desktop? 20) (t 18))
+                                        ; change the default from 34 to 18
+                                 :powerline-scale 1.5)
+    dotspacemacs-themes       '(zenburn ; change the starting theme to be zenburn
+                                 solarized-light
+                                 )
 
-   ;; Server
-   dotspacemacs-enable-server     server?
-   dotspacemacs-persistent-server server?
+    ;; Server
+    dotspacemacs-enable-server     server?
+    dotspacemacs-persistent-server server?
 
-   ;; Editing settings
-   dotspacemacs-editing-style '(vim :variables
-                                    vim-style-visual-feedback t
-                                    vim-style-remap-Y-to-y$ t)
+    ;; Editing settings
+    dotspacemacs-editing-style '(vim :variables
+                                  vim-style-visual-feedback t
+                                  vim-style-remap-Y-to-y$ t)
 
-   ;; Elpa
-   dotspacemacs-elpa-https        nil
-   dotspacemacs-elpa-subdirectory nil
+    ;; Elpa
+    dotspacemacs-elpa-https        nil
+    dotspacemacs-elpa-subdirectory nil
 
-   ;; General
-   dotspacemacs-auto-generate-layout-names t
-   dotspacemacs-fullscreen-at-startup      t
-   dotspacemacs-large-file-size            5
-   dotspacemacs-pretty-docs                t
-   dotspacemacs-search-tools               '("ag" "rg" "pt" "ack" "grep")
-   dotspacemacs-scratch-mode               'org-mode
-   dotspacemacs-startup-lists              nil
-   dotspacemacs-whitespace-cleanup         'trailing
+    ;; General
+    dotspacemacs-auto-generate-layout-names t
+    dotspacemacs-fullscreen-at-startup      t
+    dotspacemacs-large-file-size            5
+    dotspacemacs-pretty-docs                t
+    dotspacemacs-search-tools               '("ag" "rg" "pt" "ack" "grep")
+    dotspacemacs-scratch-mode               'org-mode
+    dotspacemacs-startup-lists              nil
+    dotspacemacs-whitespace-cleanup         'trailing
 
-   ;; Defs required for 'SPC f e R' `dotspacemacs/sync-configuration-layers'
-   dotspacemacs-mode-line-theme   'all-the-icons
-   dotspacemacs-leader-key        "SPC"
-   dotspacemacs-emacs-leader-key  "M-m"
-   dotspacemacs-emacs-command-key "SPC"
-   ))
+    ;; Defs required for 'SPC f e R' `dotspacemacs/sync-configuration-layers'
+    dotspacemacs-mode-line-theme   'all-the-icons
+    dotspacemacs-leader-key        "SPC"
+    dotspacemacs-emacs-leader-key  "M-m"
+    dotspacemacs-emacs-command-key "SPC"
+    ))
 
 ;;;; Spacemacs/layers
 

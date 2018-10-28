@@ -6,4 +6,8 @@
    ;; Core Config layers
    ;; gnus ; not really needed 10/20/2018
    org
+
+   ;; Lang Layers
+   clojure
+   python
    ))

@@ -1,4 +1,8 @@
-(require 'macros)
+;;; blog.el --- Hugo server manager -*- lexical-binding: t; -*-
+
+(require 'dash)
+(require 'dash-functional)
+(require 's)
 
 (provide 'blog)
 
@@ -15,6 +19,16 @@
 
 (defvar blog-hugo-server-site "http://localhost:1313/"
   "URL for `blog-hugo-process'")
+
+;;; Utils
+
+(defmacro with-dir (DIR &rest FORMS)
+  "Execute FORMS in DIR."
+  (let ((orig-dir (gensym)))
+    `(prog2
+         (setq ,orig-dir default-directory)
+         (progn (cd ,DIR) ,@FORMS)
+       (cd ,orig-dir))))
 
 ;;; Blog Commands
 

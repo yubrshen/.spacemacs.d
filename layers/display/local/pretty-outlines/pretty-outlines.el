@@ -1,19 +1,51 @@
+;;; pretty-outlines.el --- Org-bullets styling for outline-mode -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;; Similar to `org-bullets-bullet-list' and `org-ellipsis' for
+;; `outline-minor-mode', generalized to work for all major-modes that define an
+;; outline syntax when the hook `pretty-outlines-add-bullets' is added.
+
+;;; Code:
+;;;; Requires
+
+(require 'dash)
+(require 'dash-functional)
 (require 'outshine)
-(require 'macros)
+(require 's)
 
-(provide 'pretty-outlines)
+;;;; Config
 
-;;; Config
+(defvar pretty-outlines-all-the-icons? (package-installed-p 'all-the-icons)
+  "Do we use `all-the-icons' chars for bullet/ellipsis defaults?")
 
-(defvar pretty-outlines-bullets-bullet-list '("1" "2" "3" "4")
-  "An implemention of `org-bullets-bullet-list' for outlines.")
+(defvar pretty-outlines-bullets-bullet-list
+  (if pretty-outlines-all-the-icons?
+      '(#Xe3d0 #Xe3d1 #Xe3d2 #Xe3d4)
+    '(#x25c9 #x25cb #x2738 #x273f))
 
-(defvar pretty-outlines-ellipsis "~"
-  "An implementation of `org-ellipsis' for outlines.")
+  "Implemention of `org-bullets-bullet-list' for outlines, provide codepoints.
 
-;;; Outline-ellipsis
+The headers wrap around for further levels than elements in this
+list, just like for org-bullets.")
 
-;;;###autoload
+(defvar pretty-outlines-ellipsis
+  (if pretty-outlines-all-the-icons?
+      ""
+    "~")
+
+  "An implementation of `org-ellipsis' for outlines, provide a string.")
+
+(defvar pretty-outlines--max-outline-depth 8
+  "The max outline depth to apply `pretty-outlines' over.")
+
+(defvar pretty-outlines--common-face-props '(:underline nil)
+  "Common face properties/overwrites to apply to each bullet.
+
+These properties are applied to only the *bullet* part of the outline.")
+
+;;;; Outline-ellipsis
+
 (defun pretty-outlines-set-display-table ()
   (-let [display-table (if buffer-display-table
                            buffer-display-table
@@ -26,59 +58,56 @@
        vconcat
        (set-display-table-slot display-table 4))))
 
-;;; Outline-bullets
+;;;; Outline-bullets
 
-;;;###autoload
-(defun pretty-outlines--add-font-locks (font-lock-alist)
-  "Put text property for FONT-LOCK-ALIST for var-width replacements."
-  (font-lock-add-keywords
-   nil
-   (-map (-lambda ((rgx outline-str))
-           `(,rgx (0 (prog1 nil
-                       (put-text-property (match-beginning 1) (match-end 1)
-                                          'display ,outline-str)))))
-         font-lock-alist)))
-
-;;;###autoload
 (defun pretty-outlines--bullets-rgx-at-level (level)
-  "Calculate regex or outline-bullets at LEVEL."
-  (concat "\\(^"
-          (->> level
-             1+
-             outshine-calc-outline-string-at-level
-             s-trim-right
-             (s-replace "*" "\\*"))
-          "\\) "))
+  "Modify outline regex with group matches at LEVEL."
+  (let* ((outline-str
+          (->> level outshine-calc-outline-string-at-level s-trim-right))
+         (outline-rx
+          `(: (group bol
+                     ,outline-str)
+              " ")))
+    (rx-to-string outline-rx 'no-group)))
 
-;;;###autoload
-(defun pretty-outlines--propertize-bullet (level bullet)
-  "Add LEVEL-dependent face to BULLET."
-  (with-face bullet
-             (pcase level
-               (0 '(:inherit outline-1 :underline nil))
-               (1 '(:inherit outline-2 :underline nil))
-               (2 '(:inherit outline-3 :underline nil))
-               (3 '(:inherit outline-4 :underline nil))
-               (_ nil))))
+(defun pretty-outlines--level->face-props (level)
+  "Get face properties for LEVEL."
+  `(:inherit ,(intern (s-concat "outline-"
+                                (number-to-string level)))
+             ,@pretty-outlines--common-face-props))
 
-;;;###autoload
-(defun pretty-outlines--bullets-cycle ()
-  "Cycle through `pretty-outlines-bullets-bullet-list'"
-  (-let [max-outline-depth 8]
-    (->> pretty-outlines-bullets-bullet-list -cycle (-take max-outline-depth))))
+(defun pretty-outlines--glue-bullet (level bullet)
+  "Impute composition rules gluing leading spaces LEVEL-1 times to BULLET."
+  (let ((glue '(32 (Br . Bl))))
+    (-> level 1-
+       (-repeat glue)
+       -flatten
+       (-snoc bullet))))
 
-;;;###autoload
-(defun pretty-outlines--format-bullet (level bullet)
-  "Propertize and perform all other styling for BULLET at LEVEL."
-  (concat (s-repeat level " ")
-          (pretty-outlines--propertize-bullet level bullet)))
+(defun pretty-outlines--build-keyword (rgx composition face-props)
+  "Build font-lock-keyword to compose RGX into COMPOSITION with FACE-PROPS."
+  `(,rgx (0 (prog1 nil
+              (compose-region (match-beginning 1) (match-end 1)
+                              ',composition)
+              (put-text-property (match-beginning 1) (match-end 1) 'face
+                                 ',face-props)))))
 
-;;;###autoload
+(defun pretty-outlines--build-rgx-composition-face-alist (codepoints)
+  "Given CODEPOINTS construct keyword alist."
+  (-map-indexed (-lambda (level bullet)
+                  (incf level)  ; Outlines enumerated 1..n
+                  (list (pretty-outlines--bullets-rgx-at-level level)
+                        (pretty-outlines--glue-bullet          level bullet)
+                        (pretty-outlines--level->face-props    level)))
+                codepoints))
+
 (defun pretty-outlines-add-bullets ()
-  "Use with `add-hook' to enable pretty-outlines-bullets-bullet-list for mode."
-  (->>
-   (pretty-outlines--bullets-cycle)
-   (-map-indexed (-lambda (level bullet)
-                   (list (pretty-outlines--bullets-rgx-at-level level)
-                         (pretty-outlines--format-bullet        level bullet))))
-   pretty-outlines--add-font-locks))
+  "Add as hook to any major mode with outline syntax to enable pretty-outlines."
+  (->> pretty-outlines-bullets-bullet-list
+     -cycle
+     (-take pretty-outlines--max-outline-depth)
+     pretty-outlines--build-rgx-composition-face-alist
+     (-map (-applify #'pretty-outlines--build-keyword))
+     (font-lock-add-keywords nil)))
+
+(provide 'pretty-outlines)

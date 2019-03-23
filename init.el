@@ -4,7 +4,7 @@
 ;; -- Eric Kaschalk's Spacemacs Configuration --
 ;; -- Contact: ekaschalk@gmail.com --
 ;; -- MIT License --
-;; -- Emacs 26.1 ~ Spacemacs Dev Branch 0.300.0.x ~ pkgs updated: 11/16/18 --
+;; -- Emacs 26.1 ~ Spacemacs Dev Branch 0.300.0.x ~ pkgs updated: 1/21/19 --
 ;; -- http://modernemacs.com --
 ;;
 ;; Personal layers host most of my configuration - see README.
@@ -30,17 +30,9 @@
   "Alias `dotspacemacs-enable-server'. Defaults to nil for non-eric users.")
 
 (defvar redo-bindings? (if eric? t nil)
-  "Redo spacemacs bindings? Defaults to nil for non-eric users.
+  "Redo spacemacs bindings? Defaults to, and I recommend, nil to non-eric users.
 
-I aggressively re-bind and un-bind spacemacs defaults.
-
-This indicator:
-1. Removes prefixes/bindings contained within `redo-spacemacs-prefixes-list'.
-2. Removes bindings in `redo-spacemacs-undo-bindings-alist'.
-3. Adds bindings in `redo-spacemacs-new-bindings-alist'.
-
-It is highly recommend to look through the above 3 variables before enabling,
-defined at end of `layers/config/packages.el' in `config/init-redo-spacemacs'.")
+See the commentary in the config layer's local pkg `redo-spacemacs'.")
 
 ;;; Spacemacs/
 ;;;; Spacemacs/init
@@ -53,55 +45,50 @@ All `dotspacemacs-' variables with values set different than their defaults.
 They are all defined in `~/.emacs.d/core/core-dotspacemacs.el'.
 Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
   (setq-default
-   ;; Display
-   dotspacemacs-default-font `(,(if (x-list-fonts "Operator Mono")
-                                    "operator mono medium"
-                                  "Source Code Pro")
-                               :size ,(if (= 1440 (display-pixel-height)) 20 18))
-   dotspacemacs-themes       '(;; solarized-light by Yu Shen
-                               zenburn)
+    ;; Display
+    dotspacemacs-default-font `(,(if (x-list-fonts "Operator Mono")
+                                   "operator mono medium"
+                                   "Source Code Pro")
+                                 :size ,(if (= 1440 (display-pixel-height)) 20 18))
+    dotspacemacs-themes       '(;; solarized-light not liked by Yu Shen
+                                 zenburn)
 
-   ;; General
-   dotspacemacs-auto-generate-layout-names t
-   dotspacemacs-editing-style              '(vim :variables
-                                                 vim-style-visual-feedback t
-                                                 vim-style-remap-Y-to-y$ t)
-   dotspacemacs-elpa-https                 nil
-   dotspacemacs-elpa-subdirectory          nil
-   dotspacemacs-enable-server              server?
-   dotspacemacs-fullscreen-at-startup      t
-   dotspacemacs-large-file-size            5
-   dotspacemacs-persistent-server          server?
-   dotspacemacs-pretty-docs                t
-   dotspacemacs-search-tools               '("ag" "rg" "pt" "ack" "grep")
-   dotspacemacs-scratch-mode               'org-mode
-   dotspacemacs-startup-lists              nil
-   dotspacemacs-whitespace-cleanup         'trailing
+    ;; General
+    dotspacemacs-auto-generate-layout-names t
+    dotspacemacs-editing-style              '(vim :variables
+                                               vim-style-visual-feedback t
+                                               vim-style-remap-Y-to-y$ t)
+    dotspacemacs-elpa-https                 nil
+    dotspacemacs-elpa-subdirectory          nil
+    dotspacemacs-enable-server              server?
+    dotspacemacs-fullscreen-at-startup      nil ;;t ;; I don't like it full screen
+    dotspacemacs-large-file-size            5
+    dotspacemacs-persistent-server          server?
+    dotspacemacs-pretty-docs                t
+    dotspacemacs-search-tools               '("ag" "rg" "pt" "ack" "grep")
+    dotspacemacs-scratch-mode               'org-mode
+    dotspacemacs-startup-lists              nil
+    dotspacemacs-whitespace-cleanup         'trailing
 
-   ;; The following are unchanged but are still required for reloading via
-   ;; 'SPC f e R' `dotspacemacs/sync-configuration-layers' to not throw warnings
-   dotspacemacs-emacs-leader-key  "M-m"
-   dotspacemacs-emacs-command-key "SPC"
-   dotspacemacs-leader-key        "SPC"
-   dotspacemacs-mode-line-theme   'all-the-icons))
+    ;; The following are unchanged but are still required for reloading via
+    ;; 'SPC f e R' `dotspacemacs/sync-configuration-layers' to not throw warnings
+    dotspacemacs-emacs-leader-key  "M-m"
+    dotspacemacs-emacs-command-key "SPC"
+    dotspacemacs-leader-key        "SPC"
+    dotspacemacs-mode-line-theme   'all-the-icons))
 
 ;;;; Spacemacs/layers
 
 (defun dotspacemacs/layers ()
   "Instantiate Spacemacs layers declarations and package configurations."
   (setq-default
-    ;; The order of layers loading by the order of layers in the list.
-    ;; So it quite matters.
-    dotspacemacs-configuration-layers     '(javascript
-                                             (yubrshen :location local)
-                                             (config   :location local)
+    dotspacemacs-configuration-layers     '((yubrshen :location local)
+						                                 (config   :location local)
                                              (display  :location local)
                                              (personal :location local)
-                                             (dart :location local)
-                                             )
+                                             (dart :location local))
     dotspacemacs-configuration-layer-path '("~/personal-layers-spacemacs/spacemacs/layers"
-                                             "~/.spacemacs.d/layers/"
-                                             )
+                                             "~/.spacemacs.d/layers/")
     dotspacemacs-additional-packages      '()
     dotspacemacs-frozen-packages          '()
     dotspacemacs-excluded-packages
@@ -127,7 +114,9 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
 
 (defun dotspacemacs/user-config/post-layer-load-config ()
   "Configuration to take place *after all* layers/pkgs are instantiated."
-  (when (configuration-layer/package-used-p 'redo-spacemacs)
+  (when (and
+          redo-bindings?                ; only when I want it
+          (configuration-layer/package-used-p 'redo-spacemacs))
     (redo-spacemacs-bindings))
 
   ;; While toggling with `toggle-frame-fullscreen' works, I could not get
@@ -142,5 +131,5 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
   "Configuration that cannot be delegated to layers."
   (dotspacemacs/user-config/post-layer-load-config)
 
-  ;; Drop-in whatever config here without having to worry about good practices
+  ;; Drop-in whatever config here, experiment!
   )

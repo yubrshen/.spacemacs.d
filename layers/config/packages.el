@@ -15,6 +15,7 @@
         auto-dim-other-buffers
         dash-functional
         faceup
+        hierarchy
         outshine  ; also configures `outline-mode'
         s
 
@@ -50,7 +51,6 @@
 (defun config/post-init-evil ()
   (setq evil-escape-key-sequence "jk")
   (setq evil-escape-unordered-key-sequence "true")
-
   (evil-global-set-key 'normal "Q" 'evil-execute-q-macro)
   (evil-define-key '(normal visual motion) 'global
     "H" 'evil-first-non-blank
@@ -121,7 +121,13 @@
           ("sp" "#+BEGIN_SRC python\n\n#+END_SRC")))
 
   (add-hook 'org-mode-hook (lambda () (auto-fill-mode 1)))
-  (add-hook 'org-mode-hook 'flyspell-mode))
+  (add-hook 'org-mode-hook 'flyspell-mode)
+
+  ;; Experimenting with the following indentation vars:
+  (setq org-startup-indented nil)
+  (setq org-hide-leading-stars t)
+  (setq org-hide-emphasis-markers nil)
+  (setq org-indent-indentation-per-level 1))
 
 (defun config/post-init-org ()
   (evil-define-key '(normal visual motion) org-mode-map
@@ -132,8 +138,10 @@
     "gu" 'outline-previous-visible-heading)
 
   (spacemacs/set-leader-keys "aof" 'org-open-at-point-global)
+
   (spacemacs/set-leader-keys-for-major-mode 'org-mode
     "r" 'org-refile
+    "h" 'org-metaleft  ; Because of MacOS's damned, indestructable M-h binding...
     "s p" 'org-sort-entries-priorities))
 
 ;;;; Ranger
@@ -178,12 +186,18 @@
   (use-package faceup
     :defer t))
 
+;;;; Hierarchy
+
+(defun config/init-hierarchy ()
+  (use-package hierarchy
+    :defer t))
+
 ;;;; Outshine
 
 (defun config/init-outshine ()
   (use-package outshine
     :hook ((prog-mode          . outline-minor-mode)
-           (outline-minor-mode . outshine-hook-function))
+           (outline-minor-mode . outshine-mode))
 
     :bind (("<backtab>"     . outshine-cycle-buffer)
            ([(meta return)]       . outshine-insert-heading)
@@ -404,8 +418,8 @@
               ("w2" spacemacs/window-split-double-columns)
               ("w3" spacemacs/window-split-triple-columns)
               ("w_" spacemacs/maximize-horizontally)
-              ("wC" spacemacs/toggle-centered-buffer-mode-frame)
-              ("wc" spacemacs/toggle-centered-buffer-mode)
+              ("wC" spacemacs/toggle-distraction-free)
+              ("wc" spacemacs/toggle-centered-buffer)
               ("wF" make-frame)
               ("wh" evil-window-left)
               ("wj" evil-window-down)

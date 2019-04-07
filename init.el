@@ -68,7 +68,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
     dotspacemacs-search-tools               '("ag" "rg" "pt" "ack" "grep")
     dotspacemacs-scratch-mode               'org-mode
     dotspacemacs-startup-lists              nil
-    dotspacemacs-whitespace-cleanup         'trailing
+    dotspacemacs-whitespace-cleanup         'changed ; 'trailing
 
     ;; The following are unchanged but are still required for reloading via
     ;; 'SPC f e R' `dotspacemacs/sync-configuration-layers' to not throw warnings

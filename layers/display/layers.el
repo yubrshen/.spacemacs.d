@@ -1,10 +1,5 @@
-(configuration-layer/declare-layers
- '(
-   ;; Spacemacs layers
-   spacemacs-modeline
-   theming
+;;; -*- lexical-binding: t; -*-
 
-   ;; Personal layers
-   config
-   macros
+(configuration-layer/declare-layers
+ '(theming  ; Required for `config.el' theming modifications
    ))

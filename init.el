@@ -45,62 +45,71 @@ All `dotspacemacs-' variables with values set different than their defaults.
 They are all defined in `~/.emacs.d/core/core-dotspacemacs.el'.
 Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
   (setq-default
-    ;; Display
-    dotspacemacs-default-font `(,(if (x-list-fonts "Operator Mono")
-                                   "operator mono medium"
-                                   "Source Code Pro")
-                                 :size ,(if (= 1440 (display-pixel-height)) 20 18))
-    dotspacemacs-themes       '(;; solarized-light not liked by Yu Shen
-                                 zenburn)
+   ;; Display
+   dotspacemacs-default-font `(,(if (x-list-fonts "Operator Mono")
+                                    "operator mono medium"
+                                  "Source Code Pro")
+                               :size ,(if (= 1440 (display-pixel-height)) 20 18))
+   ;; dotspacemacs-themes       '(solarized-light zenburn)
+   ;; dark themes
+   ;; dotspacemacs-themes '(danneskjold manoj-dark wheatgrass cyberpunk hemisu-dark hc-zenburn sanityinc-tomorrow-bright)
+   ;; light themes
+   ;; dotspacemacs-themes '(tango-plus espresso sanityinc-tomorrow-day hemisu-light dichromacy tsdh-light whiteboard leuven)
+   ;; My preferred
 
-    ;; General
-    dotspacemacs-auto-generate-layout-names t
-    dotspacemacs-editing-style              '(vim :variables
-                                               vim-style-visual-feedback t
-                                               vim-style-remap-Y-to-y$ t)
-    dotspacemacs-elpa-https                 nil
-    dotspacemacs-elpa-subdirectory          nil
-    dotspacemacs-enable-server              server?
-    dotspacemacs-fullscreen-at-startup      nil ;;t ;; I don't like it full screen
-    dotspacemacs-large-file-size            5
-    dotspacemacs-persistent-server          server?
-    dotspacemacs-pretty-docs                t
-    dotspacemacs-search-tools               '("ag" "rg" "pt" "ack" "grep")
-    dotspacemacs-scratch-mode               'org-mode
-    dotspacemacs-startup-lists              nil
-    dotspacemacs-whitespace-cleanup         'changed ; 'trailing
+   dotspacemacs-themes '(danneskjold tango-plus espresso sanityinc-tomorrow-day hemisu-light dichromacy tsdh-light whiteboard leuven)
 
-    ;; The following are unchanged but are still required for reloading via
-    ;; 'SPC f e R' `dotspacemacs/sync-configuration-layers' to not throw warnings
-    dotspacemacs-emacs-leader-key  "M-m"
-    dotspacemacs-emacs-command-key "SPC"
-    dotspacemacs-leader-key        "SPC"
-    dotspacemacs-mode-line-theme   'all-the-icons))
+
+   ;; General
+   dotspacemacs-auto-generate-layout-names t
+   dotspacemacs-editing-style              '(vim :variables
+                                                 vim-style-visual-feedback t
+                                                 vim-style-remap-Y-to-y$ t)
+   dotspacemacs-elpa-https                 nil
+   dotspacemacs-elpa-subdirectory          nil
+   dotspacemacs-enable-server              server?
+   dotspacemacs-fullscreen-at-startup      nil ;;t ;; I don't like it full screen
+   dotspacemacs-large-file-size            5
+   dotspacemacs-persistent-server          server?
+   dotspacemacs-pretty-docs                t
+   dotspacemacs-search-tools               '("ag" "rg" "pt" "ack" "grep")
+   dotspacemacs-scratch-mode               'org-mode
+   dotspacemacs-startup-lists              nil
+   dotspacemacs-whitespace-cleanup         'changed ; 'trailing
+
+   ;; The following are unchanged but are still required for reloading via
+   ;; 'SPC f e R' `dotspacemacs/sync-configuration-layers' to not throw warnings
+   dotspacemacs-emacs-leader-key  "M-m"
+   dotspacemacs-emacs-command-key "SPC"
+   dotspacemacs-leader-key        "SPC"
+   dotspacemacs-mode-line-theme   'all-the-icons))
 
 ;;;; Spacemacs/layers
 
 (defun dotspacemacs/layers ()
   "Instantiate Spacemacs layers declarations and package configurations."
   (setq-default
-    dotspacemacs-configuration-layers     '((yubrshen :location local)
-						                                 (config   :location local)
-                                             (display  :location local)
-                                             (personal :location local)
-                                             (dart :location local))
-    dotspacemacs-configuration-layer-path '("~/personal-layers-spacemacs/spacemacs/layers"
-                                             "~/.spacemacs.d/layers/")
-    dotspacemacs-additional-packages      '()
-    dotspacemacs-frozen-packages          '()
-    dotspacemacs-excluded-packages
-    '(;; Must Exclude (for styling, functionality, bug-fixing reasons)
-       fringe importmagic scss-mode vi-tilde-fringe
+   dotspacemacs-configuration-layers     '(javascript
+                                           (yubrshen :location local)
+						                               (config   :location local)
+                                           (display  :location local)
+                                           (personal :location local)
+                                           ;;(dart :location local) ; there is already a same named layer of dart in the spacemacs shipment.
+                                           )
+   dotspacemacs-configuration-layer-path '("~/personal-layers-spacemacs/spacemacs/layers"
+                                           "~/.spacemacs.d/layers/")
+   dotspacemacs-additional-packages      '()
+   dotspacemacs-frozen-packages          '()
+   dotspacemacs-excluded-packages
+   '(;; Must Exclude (for styling, functionality, bug-fixing reasons)
+     fringe importmagic scss-mode vi-tilde-fringe
 
-       ;; Packages I don't use (non-exhaustive)
-       anzu centered-cursor-mode column-enforce-mode company-statistics
-       doom-modeline eshell-prompt-extras evil-anzu evil-mc evil-tutor
-       fancy-battery fill-column-indicator gnuplot golden-ratio indent-guide
-       live-py-mode multi-term multiple-cursors mwim neotree paradox py-isort
-       yapfify)))
+     ;; Packages I don't use (non-exhaustive)
+     anzu centered-cursor-mode column-enforce-mode company-statistics
+     doom-modeline eshell-prompt-extras evil-anzu evil-mc evil-tutor
+     fancy-battery fill-column-indicator gnuplot golden-ratio indent-guide
+     live-py-mode multi-term multiple-cursors mwim neotree paradox py-isort
+     yapfify)))
 
 ;;;; Spacemacs/user-init
 
@@ -132,4 +141,6 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
   (dotspacemacs/user-config/post-layer-load-config)
 
   ;; Drop-in whatever config here, experiment!
+
+  ;; (load "~/elisp/high-contrast-themes/high-contrast-theme.el")
   )

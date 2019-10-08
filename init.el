@@ -98,7 +98,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            )
    dotspacemacs-configuration-layer-path '("~/personal-layers-spacemacs/spacemacs/layers"
                                            "~/.spacemacs.d/layers/")
-   dotspacemacs-additional-packages      '()
+   dotspacemacs-additional-packages      '(buttercup)
    dotspacemacs-frozen-packages          '()
    dotspacemacs-excluded-packages
    '(;; Must Exclude (for styling, functionality, bug-fixing reasons)
@@ -123,9 +123,8 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
 
 (defun dotspacemacs/user-config/post-layer-load-config ()
   "Configuration to take place *after all* layers/pkgs are instantiated."
-  (when (and
-          redo-bindings?                ; only when I want it
-          (configuration-layer/package-used-p 'redo-spacemacs))
+  (when (and (boundp 'redo-bindings?) redo-bindings?
+             (configuration-layer/package-used-p 'redo-spacemacs))
     (redo-spacemacs-bindings))
 
   ;; While toggling with `toggle-frame-fullscreen' works, I could not get

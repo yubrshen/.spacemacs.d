@@ -31,28 +31,29 @@
      markdown
      yaml
 
-   ;; Languages
-   lsp
-   clojure
-   emacs-lisp
-   haskell
-   hy  ; I wrote this mode/layer
+     ;; Languages
+     lsp
+     clojure
+     emacs-lisp
+     haskell
+     hy  ; I wrote this mode/layer
 
-   (c-c++ :variables
-          ;; c-c++-backend 'lsp-ccls
-          c-c++-backend 'lsp-cquery
-          c-c++-enable-google-style t
-          c-c++-enable-google-newline t)
+     ;; (c-c++ :variables
+     ;;        ;; c-c++-backend 'lsp-ccls
+     ;;        c-c++-backend 'lsp-cquery
+     ;;        c-c++-enable-google-style t
+     ;;        c-c++-enable-google-newline t)
+     ;; comment out c-c++ to avodi the issue https://github.com/syl20bnr/spacemacs/issues/12784
 
-   (python :variables
+     (python :variables
 
-           python-backend 'lsp
-           python-lsp-server 'pyls
-           ;; python-lsp-server 'mspyls
-           python-pipenv-activate t
+       python-backend 'lsp
+       python-lsp-server 'pyls
+       ;; python-lsp-server 'mspyls
+       python-pipenv-activate t
 
-           python-test-runner 'pytest
-           python-spacemacs-indent-guess nil)
+       python-test-runner 'pytest
+       python-spacemacs-indent-guess nil)
 
      ;; Experimental/in-flux
      ;; (mu4e :variables

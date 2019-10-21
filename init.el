@@ -58,7 +58,11 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
    ;; My preferred
 
    dotspacemacs-themes '(danneskjold tango-plus espresso sanityinc-tomorrow-day hemisu-light dichromacy tsdh-light whiteboard leuven)
-
+   ;; dichromacy
+   ;; "Face colors suitable for red/green color-blind users.
+   ;; The color palette is from B. Wong, Nature Methods 8, 441 (2011).
+   ;; It is intended to provide good variability while being easily
+   ;; differentiated by individuals with protanopia or deuteranopia.
 
    ;; General
    dotspacemacs-auto-generate-layout-names t
@@ -116,7 +120,8 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
 (defun dotspacemacs/user-init ()
   "Package independent settings to run before `dotspacemacs/user-config'."
   (fringe-mode 0)
-  (setq custom-file "~/.spacemacs.d/.custom-settings.el"))
+  (setq custom-file "~/.spacemacs.d/.custom-settings.el")
+  (add-to-list 'custom-theme-load-path "~/personal-layers-spacemacs/themes/"))
 
 ;;;; Spacemacs/user-config
 ;;;;; Post Layer Load
@@ -140,6 +145,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
   (dotspacemacs/user-config/post-layer-load-config)
 
   ;; Drop-in whatever config here, experiment!
-
-  ;; (load "~/elisp/high-contrast-themes/high-contrast-theme.el")
+  ;; (load-file "~/personal-layers-spacemacs/themes/colorblind-theme.el")
+  ;;(load-file "~/personal-layers-spacemacs/themes/danneskjold-theme.el")
+  ;; (load-file "~/personal-layers-spacemacs/themes/high-contrast-theme.el")
   )

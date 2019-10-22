@@ -93,27 +93,26 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
 (defun dotspacemacs/layers ()
   "Instantiate Spacemacs layers declarations and package configurations."
   (setq-default
-   dotspacemacs-configuration-layers     '(javascript
-                                           (yubrshen :location local)
-						                               (config   :location local)
-                                           (display  :location local)
-                                           (personal :location local)
-                                           ;;(dart :location local) ; there is already a same named layer of dart in the spacemacs shipment.
-                                           )
-   dotspacemacs-configuration-layer-path '("~/personal-layers-spacemacs/spacemacs/layers"
-                                           "~/.spacemacs.d/layers/")
-   dotspacemacs-additional-packages      '(buttercup)
-   dotspacemacs-frozen-packages          '()
-   dotspacemacs-excluded-packages
-   '(;; Must Exclude (for styling, functionality, bug-fixing reasons)
-     fringe importmagic scss-mode vi-tilde-fringe
+    dotspacemacs-configuration-layers     '(javascript
+                                             (config   :location local)
+                                             (display  :location local)
+                                             (personal :location local)
+                                             (yubrshen :location local)
+                                             )
+    dotspacemacs-configuration-layer-path '("~/personal-layers-spacemacs/spacemacs/layers"
+                                             "~/.spacemacs.d/layers/")
+    dotspacemacs-additional-packages      '(buttercup)
+    dotspacemacs-frozen-packages          '()
+    dotspacemacs-excluded-packages
+    '(;; Must Exclude (for styling, functionality, bug-fixing reasons)
+       fringe importmagic scss-mode vi-tilde-fringe
 
-     ;; Packages I don't use (non-exhaustive)
-     anzu centered-cursor-mode column-enforce-mode company-statistics
-     doom-modeline eshell-prompt-extras evil-anzu evil-mc evil-tutor
-     fancy-battery fill-column-indicator gnuplot golden-ratio indent-guide
-     live-py-mode multi-term multiple-cursors mwim neotree paradox py-isort
-     yapfify)))
+       ;; Packages I don't use (non-exhaustive)
+       anzu centered-cursor-mode column-enforce-mode company-statistics
+       doom-modeline eshell-prompt-extras evil-anzu evil-mc evil-tutor
+       fancy-battery fill-column-indicator gnuplot golden-ratio indent-guide
+       live-py-mode multi-term multiple-cursors mwim neotree paradox py-isort
+       yapfify)))
 
 ;;;; Spacemacs/user-init
 
